@@ -1,10 +1,10 @@
 
-This chess program is heavily influenced by TSCP (http://www.tckerrigan.com/Chess/TSCP/)
-I've added a bitboard move generator by Pradyumna Kannan. A technical explination of bitboards
-is found here: http://pradu.us/old/Nov27_2008/Buzz/research/magic/Bitboards.pdf. The opening books
-were compiled from the Balsa 500 test suite (https://sites.google.com/site/computerschess/balsa-opening-test-suite).
-I've also included 1000 test positions (testPositions.txt) divided by eco, opening, and variation.
-The origin of that file eludes me, I'll try to dig it up and update soon.
+This chess program is heavily influenced by TSCP (http://www.tckerrigan.com/Chess/TSCP/) I've 
+added a bitboard move generator by Pradyumna Kannan. A technical explination of bitboards is 
+found here: http://pradu.us/old/Nov27_2008/Buzz/research/magic/Bitboards.pdf. The opening books 
+are the Balsa 500 lines (https://sites.google.com/site/computerschess/balsa-opening-test-suite). 
+I've also included 1000 test positions (testPositions.txt) divided by eco, opening, and 
+variation. The origin of that file eludes me, I'll try to dig it up and update soon.
 
 You can use this code in several different ways:
 
@@ -16,8 +16,9 @@ You can use this code in several different ways:
 	cross compile for windows:
 	x86_64-w64-mingw32-gcc -Werror -O3 main.c sliding.c fen.c search.c status.c movesgen.c evalOne.c evalTwo.c data.c book.c parameters.c knowledge.c stepping.c experiments.c -lm -std=gnu99
 
-	Once compiled you can run in console mode. Type help for a list of commands. Type d to display the board. enter moves in long algebric notation (e2e4, e7e5 etc). The program will search
-	to 6 ply depth.
+	Once compiled you can run in console mode. Type help for a list of commands. 
+	Type d to display the board. enter moves in long algebric notation (e2e4, e7e5 etc). 
+	The program will search to 6 ply depth.
 	
 	
 	Nick's Simple Chess Program (NSCP)
@@ -38,38 +39,46 @@ You can use this code in several different ways:
 	 R N B Q K B N R
 		
 	
-2. there are several experiments built into the code. These are a bit slow. I have since foud a faster
-	way to calculate space advantages. I will try to update soon
+2. there are several experiments built into the code.
 
 	Experiment 1: uncomment experiment 1 in main and recompile
-	this experiment will loop through all the test positions playing a low depth game twice (once for each side).
-	Each of the 12 parameter values are incremented by one centipawn each iteration for playerOne onle! The program
-	outputs a tab delimited file with 5 fields:
+	this experiment will loop through all the test positions playing a low depth 
+	game twice (once for each side). Each of the 12 parameter values are incremented 
+	by one centipawn each iteration for playerOne onle! The program outputs a tab 
+	delimited file with 5 fields:
 		field 1: the parameter
 		field 2: the parameter value
-		field 3: player one score for the 2 game minimatch. -2 -> playerOne lost with white and black. 0 = A win and a loss or two draws. 2 = playerOne won with white and black
+		field 3: player one score for the 2 game minimatch. 
+				-2 -> playerOne lost with white and black. 
+				-1 -> a loss and a draw
+				 0 -> A win and a loss or two draws. 
+				 1 -> a win and a draw
+				 2 -> playerOne won with white and black
 		field 4: the eco code
 		field 5: the opening
 		
-	The idea is that you can import this file as a dataframe in R/pandas for further analysis
+	The idea is that you can import this file as a dataframe in R/pandas for further 
+	analysis
 	
 	Experiment 2: uncomment experiment 2 in main and recompile
-	similar to experiment 1. This experiment will loop through each line in the opening book (500 lines total = 1000 games). Eeach player
-	plays a game with white and black for each line. One parameter at a time is incremented for player one only! The 1000 games
-	are divided into groups of 100. The ouput is tab delimited into 5 fields:
+	similar to experiment 1. This experiment will loop through each line in the
+	opening book  (500 lines total = 1000 games). Eeach player plays a game with 
+	white and black for each line. One parameter at a time is incremented for 
+	player one only! The 1000 games are divided into groups of 100. The ouput 
+	is tab delimited into 5 fields:
 		field 1: the parameter under investigation
 		field 2: the parameter value used for player one only
-		field 3: the average number of extra wins for player one in the 100 game matches
+		field 3: the average number of extra wins for player one in the 100 games
 		field 4: the average number of extra wins - standard deviation
 		field 5: the average number of extra wins + standard deviation
 		
-	WARNING: this experiment takes a long time to run! a more recent version of the program has
-	a much faster calculation of space. I will try to update soon.
+	WARNING: this experiment takes a long time to run! a more recent version of 
+	the program has a much faster calculation of space. I will try to update soon.
 	
-	Experiment 3: uncomment experiment3 in main and recompile
-	this experiment plays a minimatch between of a specified number of games. Parameter values
-	for player one and player two can be changed on the command line. Random book moves are used
-	for each game in the match. 
+	Experiment 3: uncomment experiment3 in main and recompile this experiment 
+	plays a minimatch between of a specified number of games. Parameter values
+	for player one and player two can be changed on the command line. Random 
+	book moves are used for each game in the match. 
 	
 	Examples:
 	
@@ -82,8 +91,8 @@ You can use this code in several different ways:
 	play a 100 game match but player two values space
 	./a.ouput --BONUS_MOVE_OPTIONS_TWO 5
 
-	NOTE that all the parameters of the eval function are command line options so you can easily
-	test different parameter sets against each other:
+	NOTE that all the parameters of the eval function are command line options so you 
+	can easily test different parameter sets against each other:
 		--PENALTY_DOUBLED_PAWN_ONE;
 		--PENALTY_ISOLATED_PAWN_ONE;
 		--PENALTY_BACKWARD_PAWN_ONE;
@@ -110,10 +119,10 @@ You can use this code in several different ways:
 		--ROOK_SEMI_OPEN_FILE_BONUS_TWO;
 	
 	Experiment 4: uncomment experiment4 in main and recompile
-	basically runs a depth first search from the starting position where the only objective for each player
-	is to maximize the number of legal moves. Leads to some interesting theoretical lines. Thes score is
-	the number of extra moves for which at the end of the variation shown. Note that this is the best possible
-	variation at the given search depth.
+	basically runs a depth first search from the starting position where the only objective 
+	for each player is to maximize the number of legal moves. Leads to some interesting 
+	theoretical lines. Thes score is the number of extra moves for which at the end of the 
+	variation shown. Note that this is the best possible variation at the given search depth.
 	
 	ply      nodes  score  pv
 	  1         21     10  e2e4
@@ -124,5 +133,5 @@ You can use this code in several different ways:
 	  6     178876      4  e2e3 e7e5 d1g4 h7h5 g4f5 d8f6
 	  7    1434243      7  e2e3 h7h5 d1f3 e7e6 h2h4 d8f6 f1b5
 	  
-3. If you would like to compile and run as an xboard/winboard engine uncomment the xboard() function in main
-	and recompile.
+3. If you would like to compile and run as an xboard/winboard engine uncomment the xboard() 
+	function in main and recompile.
